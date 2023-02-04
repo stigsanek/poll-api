@@ -3,6 +3,10 @@ from starlette.middleware.cors import CORSMiddleware
 
 from poll_api.api.api_v1.api import api_router
 from poll_api.config import settings
+from poll_api.db import engine
+from poll_api.models.base import Base
+
+Base.metadata.create_all(engine)
 
 app = FastAPI(
     debug=settings.DEBUG,
