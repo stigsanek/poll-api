@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -32,6 +33,8 @@ class User(UserBase):
     """Properties to return via API
     """
     id: int
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         orm_mode = True
