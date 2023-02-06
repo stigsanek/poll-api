@@ -50,14 +50,14 @@ def get(
     """
     user = get_or_404(crud=user_crud, db=db, id=id)
 
+    if user_crud.is_superuser(cur_user):
+        return user
     if user == cur_user:
         return user
-    if not user_crud.is_superuser(user):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="The user doesn't have enough privileges"
-        )
-    return user
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="The user doesn't have enough privileges"
+    )
 
 
 @router.patch(path='/{id}', response_model=user.User)
@@ -71,17 +71,17 @@ def update(
     """
     user = get_or_404(crud=user_crud, db=db, id=id)
 
-    if user == cur_user and not user_crud.is_superuser(cur_user):
+    if user_crud.is_superuser(cur_user):
+        check_username(db=db, user_in=user_in)
+        return user_crud.update(db=db, db_obj=user, obj_in=user_in)
+    if user == cur_user:
         check_username(db=db, user_in=user_in)
         user_in.is_superuser = False
         return user_crud.update(db=db, db_obj=user, obj_in=user_in)
-    if not user_crud.is_superuser(user):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="The user doesn't have enough privileges"
-        )
-    check_username(db=db, user_in=user_in)
-    return user_crud.update(db=db, db_obj=user, obj_in=user_in)
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="The user doesn't have enough privileges"
+    )
 
 
 @router.delete(

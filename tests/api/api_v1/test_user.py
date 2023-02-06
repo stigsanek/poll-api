@@ -69,3 +69,104 @@ def test_create(client: TestClient) -> None:
     resp = client.post(url=urls.users, json=data)
 
     assert resp.status_code == 201
+
+
+def test_get_for_admin(client: TestClient, auth_admin: dict) -> None:
+    """Test return user for superuser
+
+    Args:
+        client (TestClient): Test client fixture
+        auth_admin (dict): Auth headers fixture
+    """
+    resp = client.get(url=f'{urls.users}/10', headers=auth_admin)
+    assert resp.status_code == 404
+
+    resp = client.get(url=f'{urls.users}/2', headers=auth_admin)
+    resp_data = resp.json()
+
+    assert resp.status_code == 200
+    assert resp_data['username'] == 'user'
+
+
+def test_get_for_user(client: TestClient, auth_user: dict) -> None:
+    """Test return user for user
+
+    Args:
+        client (TestClient): Test client fixture
+        auth_admin (dict): Auth headers fixture
+    """
+    resp = client.get(url=f'{urls.users}/1', headers=auth_user)
+    assert resp.status_code == 403
+
+    resp = client.get(url=f'{urls.users}/2', headers=auth_user)
+    resp_data = resp.json()
+
+    assert resp.status_code == 200
+    assert resp_data['username'] == 'user'
+
+
+def test_update_for_admin(client: TestClient, auth_admin: dict) -> None:
+    """Test update user for superuser
+
+    Args:
+        client (TestClient): Test client fixture
+        auth_admin (dict): Auth headers fixture
+    """
+    resp = client.patch(url=f'{urls.users}/10', headers=auth_admin, json={})
+    assert resp.status_code == 404
+
+    resp = client.patch(
+        url=f'{urls.users}/2',
+        headers=auth_admin,
+        json={'first_name': 'Test'}
+    )
+    resp_data = resp.json()
+
+    assert resp.status_code == 200
+    assert resp_data['first_name'] == 'Test'
+
+
+def test_update_for_user(client: TestClient, auth_user: dict) -> None:
+    """Test update user for superuser
+
+    Args:
+        client (TestClient): Test client fixture
+        auth_user (dict): Auth headers fixture
+    """
+    resp = client.patch(url=f'{urls.users}/1', headers=auth_user, json={})
+    assert resp.status_code == 403
+
+    resp = client.patch(
+        url=f'{urls.users}/2',
+        headers=auth_user,
+        json={'last_name': 'Test'}
+    )
+    resp_data = resp.json()
+
+    assert resp.status_code == 200
+    assert resp_data['last_name'] == 'Test'
+
+
+def test_delete_for_admin(client: TestClient, auth_admin: dict) -> None:
+    """Test delete user for superuser
+
+    Args:
+        client (TestClient): Test client fixture
+        auth_admin (dict): Auth headers fixture
+    """
+    resp = client.delete(url=f'{urls.users}/10', headers=auth_admin)
+    assert resp.status_code == 404
+
+    resp = client.delete(url=f'{urls.users}/3', headers=auth_admin)
+    assert resp.status_code == 204
+
+
+def test_delete_for_user(client: TestClient, auth_user: dict) -> None:
+    """Test delete user for user
+
+    Args:
+        client (TestClient): Test client fixture
+        auth_user (dict): Auth headers fixture
+    """
+    resp = client.delete(url=f'{urls.users}/2', headers=auth_user)
+    assert resp.status_code == 403
