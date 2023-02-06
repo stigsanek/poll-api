@@ -63,7 +63,7 @@ def test_create(client: TestClient) -> None:
     resp_data = resp.json()
 
     assert resp.status_code == 400
-    assert 'already exists' in resp_data['detail'].lower()
+    assert 'unique constraint failed' in resp_data['detail'].lower()
 
     data['username'] = 'test1'
     resp = client.post(url=urls.users, json=data)

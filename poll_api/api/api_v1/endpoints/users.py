@@ -1,6 +1,7 @@
 from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from poll_api.api.deps import get_active_superuser, get_active_user, get_db
@@ -35,13 +36,14 @@ def get_list(
 def create(user_in: user.UserCreate, db: Session = Depends(get_db)) -> Any:
     """Creates user
     """
-    if db.query(User).filter(User.username == user_in.username).first():
+    try:
+        user_in.is_superuser = False
+        return user_crud.create(db=db, obj_in=user_in)
+    except IntegrityError as err:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail='The user with this username already exists'
+            detail=str(err.orig)
         )
-    user_in.is_superuser = False
-    return user_crud.create(db=db, obj_in=user_in)
 
 
 @router.get(path='/{id}', response_model=user.User)
@@ -75,11 +77,17 @@ def update(
     """
     user = get_or_404(crud=user_crud, db=db, id=id)
 
-    if user_crud.is_superuser(cur_user):
-        return user_crud.update(db=db, db_obj=user, obj_in=user_in)
-    if user == cur_user:
-        user_in.is_superuser = False
-        return user_crud.update(db=db, db_obj=user, obj_in=user_in)
+    try:
+        if user_crud.is_superuser(cur_user):
+            return user_crud.update(db=db, db_obj=user, obj_in=user_in)
+        if user == cur_user:
+            user_in.is_superuser = False
+            return user_crud.update(db=db, db_obj=user, obj_in=user_in)
+    except IntegrityError as err:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(err.orig)
+        )
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="The user doesn't have enough privileges"
