@@ -38,6 +38,10 @@ class User(Base):
         back_populates='user',
         cascade='all, delete-orphan'
     )
+    votes: Mapped[List['Vote']] = relationship(
+        back_populates='user',
+        cascade='all, delete-orphan'
+    )
 
 
 class Question(Base):
@@ -48,6 +52,10 @@ class Question(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(String(150), nullable=False)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
+    )
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     user: Mapped['User'] = relationship(back_populates='questions')
     choices: Mapped[List['Choice']] = relationship(
@@ -63,6 +71,31 @@ class Choice(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(String(150), nullable=False)
-    votes: Mapped[int] = mapped_column(default=0)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
+    )
     question_id: Mapped[int] = mapped_column(ForeignKey('question.id'))
     question: Mapped['Question'] = relationship(back_populates='choices')
+    votes: Mapped[List['Vote']] = relationship(
+        back_populates='choice',
+        cascade='all, delete-orphan'
+    )
+
+
+class Vote(Base):
+    """Vote model
+    """
+    __tablename__ = 'vote'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
+    )
+    choice_id: Mapped[int] = mapped_column(ForeignKey('choice.id'))
+    choice: Mapped['Choice'] = relationship(back_populates='votes')
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    user: Mapped['User'] = relationship(back_populates='votes')
