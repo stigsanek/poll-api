@@ -31,5 +31,7 @@ class UserUpdate(UserBase):
 class User(UserBase):
     """Properties to return via API
     """
+    id: int
+
     class Config:
         orm_mode = True
