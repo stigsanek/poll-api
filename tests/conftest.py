@@ -3,7 +3,7 @@ from typing import Generator
 import pytest
 from fastapi.testclient import TestClient
 
-from poll_api.api.deps import get_db
+from poll_api.db import SessionLocal
 from poll_api.main import app
 from poll_api.models.user import User
 from tests import FAKE_PASSWORD, urls
@@ -17,13 +17,14 @@ def load_fixtures() -> Generator:
     Yields:
         Generator: Test case
     """
-    db = next(get_db())
+    db = SessionLocal()
     users = read_json_fixture('users.json')
 
     for user in users:
         db.add(User(**user))
         db.commit()
     yield
+    db.close()
 
 
 @pytest.fixture(scope='module')
