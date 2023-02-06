@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from poll_api.api.deps import get_active_superuser, get_active_user, get_db
-from poll_api.api.utils import check_username, get_or_404
+from poll_api.api.utils import get_or_404
 from poll_api.crud.user import user_crud
 from poll_api.models import User
 from poll_api.schemas import user
@@ -35,7 +35,11 @@ def get_list(
 def create(user_in: user.UserCreate, db: Session = Depends(get_db)) -> Any:
     """Creates user
     """
-    check_username(db=db, user_in=user_in)
+    if db.query(User).filter(User.username == user_in.username).first():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='The user with this username already exists'
+        )
     user_in.is_superuser = False
     return user_crud.create(db=db, obj_in=user_in)
 
@@ -72,10 +76,8 @@ def update(
     user = get_or_404(crud=user_crud, db=db, id=id)
 
     if user_crud.is_superuser(cur_user):
-        check_username(db=db, user_in=user_in)
         return user_crud.update(db=db, db_obj=user, obj_in=user_in)
     if user == cur_user:
-        check_username(db=db, user_in=user_in)
         user_in.is_superuser = False
         return user_crud.update(db=db, db_obj=user, obj_in=user_in)
     raise HTTPException(
