@@ -1,7 +1,10 @@
 import secrets
 from typing import Any, List
 
+from dotenv import load_dotenv
 from pydantic import AnyHttpUrl, BaseSettings
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
