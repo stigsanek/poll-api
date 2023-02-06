@@ -27,7 +27,11 @@ def get_list(
     return user_crud.get_list(db=db, offset=offset, limit=limit)
 
 
-@router.post(path='/', response_model=user.User)
+@router.post(
+    path='/',
+    status_code=status.HTTP_201_CREATED,
+    response_model=user.User
+)
 def create(user_in: user.UserCreate, db: Session = Depends(get_db)) -> Any:
     """Creates user
     """

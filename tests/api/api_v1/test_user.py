@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from poll_api.config import settings
+from tests import FAKE_PASSWORD, urls
 
 
 def test_no_auth(client: TestClient) -> None:
@@ -9,18 +9,16 @@ def test_no_auth(client: TestClient) -> None:
     Args:
         client (TestClient): Test client fixture
     """
-    url = f'{settings.API_V1}/users'
-
-    resp = client.get(url=url)
+    resp = client.get(url=urls.users)
     assert resp.status_code == 401
 
-    resp = client.get(url=f'{url}/1')
+    resp = client.get(url=f'{urls.users}/1')
     assert resp.status_code == 401
 
-    resp = client.patch(url=f'{url}/1')
+    resp = client.patch(url=f'{urls.users}/1')
     assert resp.status_code == 401
 
-    resp = client.delete(url=f'{url}/1')
+    resp = client.delete(url=f'{urls.users}/1')
     assert resp.status_code == 401
 
 
@@ -31,10 +29,7 @@ def test_get_list_for_admin(client: TestClient, auth_admin: dict) -> None:
         client (TestClient): Test client fixture
         auth_admin (dict): Auth headers fixture
     """
-    resp = client.get(
-        url=f'{settings.API_V1}/users',
-        headers=auth_admin
-    )
+    resp = client.get(url=urls.users, headers=auth_admin)
     resp_data = resp.json()
 
     assert resp.status_code == 200
@@ -48,8 +43,29 @@ def test_get_list_for_user(client: TestClient, auth_user: dict) -> None:
         client (TestClient): Test client fixture
         auth_user (dict): Auth headers fixture
     """
-    resp = client.get(
-        url=f'{settings.API_V1}/users',
-        headers=auth_user
-    )
+    resp = client.get(url=urls.users, headers=auth_user)
     assert resp.status_code == 403
+
+
+def test_create(client: TestClient) -> None:
+    """Test create user
+
+    Args:
+        client (TestClient): Test client fixture
+    """
+    data = {
+        'username': 'test',
+        'first_name': 'Test',
+        'last_name': 'Test',
+        'password': FAKE_PASSWORD,
+    }
+    resp = client.post(url=urls.users, json=data)
+    resp_data = resp.json()
+
+    assert resp.status_code == 400
+    assert 'already exists' in resp_data['detail'].lower()
+
+    data['username'] = 'test1'
+    resp = client.post(url=urls.users, json=data)
+
+    assert resp.status_code == 201

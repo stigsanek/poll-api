@@ -5,7 +5,7 @@
     "last_name": "Sanchez",
     "is_active": true,
     "is_superuser": true,
-    "hashed_password": "$2b$12$FqIGYhNRp4drkBUwtCAb3u30PlhBEgwYgmNOjI8rD06v3puKgf4jO"
+    "hashed_password": "$2b$12$V0BFr8cgSy9U8SHll5Af5ueoyPRqheDupMxvSXJG/IMr9MU.e4Lle"
   },
   {
     "username": "user",
@@ -13,7 +13,7 @@
     "last_name": "Smith",
     "is_active": true,
     "is_superuser": false,
-    "hashed_password": "$2b$12$FqIGYhNRp4drkBUwtCAb3u30PlhBEgwYgmNOjI8rD06v3puKgf4jO"
+    "hashed_password": "$2b$12$V0BFr8cgSy9U8SHll5Af5ueoyPRqheDupMxvSXJG/IMr9MU.e4Lle"
   },
   {
     "username": "test",
@@ -21,6 +21,6 @@
     "last_name": "Smith",
     "is_active": false,
     "is_superuser": false,
-    "hashed_password": "$2b$12$FqIGYhNRp4drkBUwtCAb3u30PlhBEgwYgmNOjI8rD06v3puKgf4jO"
+    "hashed_password": "$2b$12$V0BFr8cgSy9U8SHll5Af5ueoyPRqheDupMxvSXJG/IMr9MU.e4Lle"
   }
 ]

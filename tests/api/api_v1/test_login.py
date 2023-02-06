@@ -1,7 +1,6 @@
 from fastapi.testclient import TestClient
 
-from poll_api.config import settings
-from tests import FAKE_PASSWORD
+from tests import FAKE_PASSWORD, urls
 
 
 def test_success_login(client: TestClient) -> None:
@@ -11,7 +10,7 @@ def test_success_login(client: TestClient) -> None:
         client (TestClient): Test client fixture
     """
     resp = client.post(
-        url=f'{settings.API_V1}/login',
+        url=urls.login,
         data={'username': 'admin', 'password': FAKE_PASSWORD}
     )
     resp_data = resp.json()
@@ -28,7 +27,7 @@ def test_err_login(client: TestClient) -> None:
         client (TestClient): Test client fixture
     """
     resp = client.post(
-        url=f'{settings.API_V1}/login',
+        url=urls.login,
         data={'username': 'admin', 'password': 'test'}
     )
     resp_data = resp.json()
@@ -37,7 +36,7 @@ def test_err_login(client: TestClient) -> None:
     assert 'incorrect' in resp_data['detail'].lower()
 
     resp = client.post(
-        url=f'{settings.API_V1}/login',
+        url=urls.login,
         data={'username': 'test', 'password': FAKE_PASSWORD}
     )
     resp_data = resp.json()

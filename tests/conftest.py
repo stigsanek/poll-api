@@ -4,10 +4,9 @@ import pytest
 from fastapi.testclient import TestClient
 
 from poll_api.api.deps import get_db
-from poll_api.config import settings
 from poll_api.main import app
 from poll_api.models.user import User
-from tests import FAKE_PASSWORD
+from tests import FAKE_PASSWORD, urls
 from tests.utils import read_json_fixture
 
 
@@ -49,7 +48,7 @@ def auth_admin(client: TestClient) -> dict:
         dict: Auth headers
     """
     resp = client.post(
-        url=f'{settings.API_V1}/login',
+        url=urls.login,
         data={'username': 'admin', 'password': FAKE_PASSWORD}
     )
     access_token = resp.json()['access_token']
@@ -67,7 +66,7 @@ def auth_user(client: TestClient) -> dict:
         dict: Auth headers
     """
     resp = client.post(
-        url=f'{settings.API_V1}/login',
+        url=urls.login,
         data={'username': 'user', 'password': FAKE_PASSWORD}
     )
     access_token = resp.json()['access_token']
