@@ -75,5 +75,27 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             return None
         return user
 
+    def is_active(self, user: User) -> bool:
+        """Return active flag
+
+        Args:
+            user (User): User instance
+
+        Returns:
+            bool: Active flag
+        """
+        return user.is_active
+
+    def is_superuser(self, user: User) -> bool:
+        """Return superuser flag
+
+        Args:
+            user (User): User instance
+
+        Returns:
+            bool: Superuser flag
+        """
+        return user.is_superuser
+
 
 crud = CRUDUser(User)

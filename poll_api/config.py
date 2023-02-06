@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     DEBUG: bool
     DATABASE_URL: str
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     class Config:
         case_sensitive = True
