@@ -1,0 +1,26 @@
+[
+  {
+    "username": "admin",
+    "first_name": "Rick",
+    "last_name": "Sanchez",
+    "is_active": true,
+    "is_superuser": true,
+    "hashed_password": "$2b$12$FqIGYhNRp4drkBUwtCAb3u30PlhBEgwYgmNOjI8rD06v3puKgf4jO"
+  },
+  {
+    "username": "user",
+    "first_name": "Morty",
+    "last_name": "Smith",
+    "is_active": true,
+    "is_superuser": false,
+    "hashed_password": "$2b$12$FqIGYhNRp4drkBUwtCAb3u30PlhBEgwYgmNOjI8rD06v3puKgf4jO"
+  },
+  {
+    "username": "test",
+    "first_name": "Summer",
+    "last_name": "Smith",
+    "is_active": false,
+    "is_superuser": false,
+    "hashed_password": "$2b$12$FqIGYhNRp4drkBUwtCAb3u30PlhBEgwYgmNOjI8rD06v3puKgf4jO"
+  }
+]
