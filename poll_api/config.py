@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     API_V1: str = '/api/v1'
     PROJECT_NAME: str
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    DEBUG: bool
+    DEBUG: bool = True
     DATABASE_URL: str
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
