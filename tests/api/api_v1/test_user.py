@@ -4,7 +4,7 @@ from tests import FAKE_PASSWORD, urls
 
 
 def test_no_auth(client: TestClient) -> None:
-    """Test return user list no auth
+    """Test endpoints no auth
 
     Args:
         client (TestClient): Test client fixture
