@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from poll_api.crud.base import CRUDBase
-from poll_api.models.user import User
+from poll_api.models import User
 from poll_api.schemas.user import UserCreate, UserUpdate
 from poll_api.security import get_password_hash, verify_password
 

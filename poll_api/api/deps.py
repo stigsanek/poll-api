@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from poll_api.config import settings
 from poll_api.crud.user import user_crud
 from poll_api.db import SessionLocal
-from poll_api.models.user import User
+from poll_api.models import User
 from poll_api.schemas.token import TokenPayload
 from poll_api.security import ALGORITHM
 

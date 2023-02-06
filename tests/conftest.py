@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from poll_api.db import SessionLocal
 from poll_api.main import app
-from poll_api.models.user import User
+from poll_api.models import User
 from tests import FAKE_PASSWORD, urls
 from tests.utils import read_json_fixture
 

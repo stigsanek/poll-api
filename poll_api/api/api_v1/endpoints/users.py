@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from poll_api.api.deps import get_active_superuser, get_active_user, get_db
 from poll_api.api.utils import check_username, get_or_404
 from poll_api.crud.user import user_crud
-from poll_api.models.user import User
+from poll_api.models import User
 from poll_api.schemas import user
 
 router = APIRouter()
