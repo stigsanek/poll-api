@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from poll_api.api.deps import get_active_superuser, get_active_user, get_db
 from poll_api.api.utils import check_username, get_or_404
-from poll_api.crud.user import crud
+from poll_api.crud.user import user_crud
 from poll_api.models.user import User
 from poll_api.schemas import user
 
@@ -24,7 +24,7 @@ def get_list(
 ) -> Any:
     """Returns user list
     """
-    return crud.get_list(db=db, offset=offset, limit=limit)
+    return user_crud.get_list(db=db, offset=offset, limit=limit)
 
 
 @router.post(path='/', response_model=user.User)
@@ -33,7 +33,7 @@ def create(user_in: user.UserCreate, db: Session = Depends(get_db)) -> Any:
     """
     check_username(db=db, user_in=user_in)
     user_in.is_superuser = False
-    return crud.create(db=db, obj_in=user_in)
+    return user_crud.create(db=db, obj_in=user_in)
 
 
 @router.get(path='/{id}', response_model=user.User)
@@ -44,11 +44,11 @@ def get(
 ) -> Any:
     """Returns user by id
     """
-    user = get_or_404(crud=crud, db=db, id=id)
+    user = get_or_404(crud=user_crud, db=db, id=id)
 
     if user == cur_user:
         return user
-    if not crud.is_superuser(user):
+    if not user_crud.is_superuser(user):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="The user doesn't have enough privileges"
@@ -65,19 +65,19 @@ def update(
 ) -> Any:
     """Updates user
     """
-    user = get_or_404(crud=crud, db=db, id=id)
+    user = get_or_404(crud=user_crud, db=db, id=id)
 
-    if user == cur_user and not crud.is_superuser(cur_user):
+    if user == cur_user and not user_crud.is_superuser(cur_user):
         check_username(db=db, user_in=user_in)
         user_in.is_superuser = False
-        return crud.update(db=db, db_obj=user, obj_in=user_in)
-    if not crud.is_superuser(user):
+        return user_crud.update(db=db, db_obj=user, obj_in=user_in)
+    if not user_crud.is_superuser(user):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="The user doesn't have enough privileges"
         )
     check_username(db=db, user_in=user_in)
-    return crud.update(db=db, db_obj=user, obj_in=user_in)
+    return user_crud.update(db=db, db_obj=user, obj_in=user_in)
 
 
 @router.delete(
@@ -88,6 +88,6 @@ def update(
 def delete(id: int, db: Session = Depends(get_db)) -> None:
     """Deletes user
     """
-    user = get_or_404(crud=crud, db=db, id=id)
-    crud.delete(db=db, db_obj=user)
-    crud.delete(db=db, db_obj=user)
+    user = get_or_404(crud=user_crud, db=db, id=id)
+    user_crud.delete(db=db, db_obj=user)
+    user_crud.delete(db=db, db_obj=user)

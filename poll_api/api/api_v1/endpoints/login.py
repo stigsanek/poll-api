@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from poll_api.api.deps import get_db
-from poll_api.crud.user import crud as user_crud
+from poll_api.crud.user import user_crud
 from poll_api.schemas.token import Token
 from poll_api.security import create_access_token
 

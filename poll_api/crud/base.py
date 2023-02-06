@@ -32,7 +32,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             Optional[ModelType]: ModelType instance
         """
-        return db.query(self.model).get(id)
+        return db.get(self.model, id)
 
     def get_list(
         self,
