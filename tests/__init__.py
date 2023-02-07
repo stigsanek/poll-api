@@ -10,10 +10,11 @@ FAKE_PASSWORD = 'fake_password'
 
 FAKE_DB = 'fakedb.sqlite3'
 
-APIUrls = namedtuple('APIUrls', ('users', 'login'))
+APIUrls = namedtuple('APIUrls', ('login', 'users', 'questions'))
 urls = APIUrls(
+    login=f'{settings.API_V1}/login',
     users=f'{settings.API_V1}/users',
-    login=f'{settings.API_V1}/login'
+    questions=f'{settings.API_V1}/questions',
 )
 
 try:

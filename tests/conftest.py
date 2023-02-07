@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from poll_api.db import SessionLocal
 from poll_api.main import app
-from poll_api.models import User
+from poll_api.models import Choice, Question, User
 from tests import FAKE_PASSWORD, urls
 from tests.utils import read_json_fixture
 
@@ -18,11 +18,15 @@ def load_fixtures() -> Generator:
         Generator: Test case
     """
     db = SessionLocal()
-    users = read_json_fixture('users.json')
 
-    for user in users:
-        db.add(User(**user))
-        db.commit()
+    users = read_json_fixture('users.json')
+    [db.add(User(**user)) for user in users]
+    questions = read_json_fixture('questions.json')
+    [db.add(Question(**question)) for question in questions]
+    choices = read_json_fixture('choices.json')
+    [db.add(Choice(**choice)) for choice in choices]
+
+    db.commit()
     yield
     db.close()
 
