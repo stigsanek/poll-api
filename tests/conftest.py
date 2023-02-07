@@ -3,20 +3,21 @@ from typing import Generator
 import pytest
 from fastapi.testclient import TestClient
 
-from poll_api.db import SessionLocal
+from poll_api.db import SessionLocal, engine
 from poll_api.main import app
-from poll_api.models import Choice, Question, User
+from poll_api.models import Base, Choice, Question, User
 from tests import FAKE_PASSWORD, urls
 from tests.utils import read_json_fixture
 
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope='module', autouse=True)
 def load_fixtures() -> Generator:
     """Load fixtures to database
 
     Yields:
         Generator: Test case
     """
+    Base.metadata.create_all(engine)
     db = SessionLocal()
 
     users = read_json_fixture('users.json')
@@ -29,6 +30,7 @@ def load_fixtures() -> Generator:
     db.commit()
     yield
     db.close()
+    Base.metadata.drop_all(engine)
 
 
 @pytest.fixture(scope='module')
