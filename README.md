@@ -73,7 +73,7 @@ INFO: Application startup complete.
 INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
 
-Open [http://localhost:8000](http://localhost:8000) in your browser.
+Open [http://localhost:8000/docs](http://localhost:8000/docs) in your browser.
 
 ### 2. Docker
 
@@ -116,7 +116,7 @@ Creating poll-api_db_1  ... done
 Creating poll-api_web_1 ... done
 ```
 
-Open [http://localhost:8000](http://localhost:8000) in your browser.
+Open [http://localhost:8000/docs](http://localhost:8000/docs) in your browser.
 
 #### Run production mode
 
@@ -130,4 +130,4 @@ Creating poll-api_db_1  ... done
 Creating poll-api_web_1 ... done
 ```
 
-Open [http://localhost:8000](http://localhost:8000) in your browser.
+Open [http://localhost:8000/docs](http://localhost:8000/docs) in your browser.
