@@ -2,31 +2,37 @@
   {
     "id": 1,
     "text": "Pizza universe",
+    "user_id": 1,
     "question_id": 1
   },
   {
     "id": 2,
     "text": "Blender universe",
+    "user_id": 1,
     "question_id": 1
   },
   {
     "id": 3,
     "text": "Armchair universe",
+    "user_id": 1,
     "question_id": 1
   },
   {
     "id": 4,
     "text": "Beth Smith",
+    "user_id": 2,
     "question_id": 2
   },
   {
     "id": 5,
     "text": "Jerry Smith",
+    "user_id": 2,
     "question_id": 2
   },
   {
     "id": 6,
     "text": "Summer Smith",
+    "user_id": 2,
     "question_id": 2
   }
 ]

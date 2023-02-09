@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 from poll_api.api.deps import get_active_user, get_db
 from poll_api.api.utils import get_or_404
 from poll_api.crud.choice import choice_crud
-from poll_api.crud.question import question_crud
 from poll_api.models import User
 from poll_api.schemas import choice
 
@@ -34,9 +33,8 @@ def update(
     """Updates choice
     """
     choice = get_or_404(crud=choice_crud, db=db, id=id)
-    question = question_crud.get(db=db, id=choice.question_id)
 
-    if question.user_id == cur_user.id:
+    if choice.user_id == cur_user.id:
         return choice_crud.update(db=db, db_obj=choice, obj_in=choice_in)
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
@@ -53,9 +51,8 @@ def delete(
     """Deletes choice
     """
     choice = get_or_404(crud=choice_crud, db=db, id=id)
-    question = question_crud.get(db=db, id=choice.question_id)
 
-    if question.user_id == cur_user.id:
+    if choice.user_id == cur_user.id:
         return choice_crud.delete(db=db, db_obj=choice)
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,

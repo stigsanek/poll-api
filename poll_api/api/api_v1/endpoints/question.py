@@ -48,7 +48,8 @@ def create(
     choice_crud.create(
         db=db,
         obj_list=question_in.choices,
-        question_id=question.id
+        question_id=question.id,
+        user_id=cur_user.id
     )
     return question_crud.get(db=db, id=question.id)
 

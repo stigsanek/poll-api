@@ -16,7 +16,8 @@ class CRUDChoice(CRUDBase[Choice, ChoiceBase, ChoiceBase]):
         self,
         db: Session,
         obj_list: List[ChoiceBase],
-        question_id: int
+        question_id: int,
+        user_id: int
     ) -> None:
         """Create choices bulk
 
@@ -24,11 +25,12 @@ class CRUDChoice(CRUDBase[Choice, ChoiceBase, ChoiceBase]):
             db (Session): Database session
             obj_list (List[ChoiceBase]): ChoiceBase instance list
             question_id (int): Question id
+            user_id (int): User id
         """
         data = []
         for obj in obj_list:
             obj_in = obj.dict()
-            obj_in.update({'question_id': question_id})
+            obj_in.update({'question_id': question_id, 'user_id': user_id})
             data.append(obj_in)
 
         db.execute(insert(self.model), data)

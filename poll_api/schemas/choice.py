@@ -15,6 +15,7 @@ class Choice(ChoiceBase):
     id: int
     created_at: datetime
     updated_at: datetime
+    user_id: int
     question_id: int
 
     class Config:
