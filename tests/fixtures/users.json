@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "username": "admin",
     "first_name": "Rick",
     "last_name": "Sanchez",
@@ -8,6 +9,7 @@
     "hashed_password": "$2b$12$V0BFr8cgSy9U8SHll5Af5ueoyPRqheDupMxvSXJG/IMr9MU.e4Lle"
   },
   {
+    "id": 2,
     "username": "user",
     "first_name": "Morty",
     "last_name": "Smith",
@@ -16,6 +18,7 @@
     "hashed_password": "$2b$12$V0BFr8cgSy9U8SHll5Af5ueoyPRqheDupMxvSXJG/IMr9MU.e4Lle"
   },
   {
+    "id": 3,
     "username": "test",
     "first_name": "Summer",
     "last_name": "Smith",
