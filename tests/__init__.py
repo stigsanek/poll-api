@@ -19,4 +19,4 @@ urls = APIUrls(
     users=f'{settings.API_V1}/users'
 )
 
-settings.DATABASE_URL = 'sqlite:///db.sqlite3'
+settings.DATABASE_URL = 'sqlite:///fakedb.sqlite3'
