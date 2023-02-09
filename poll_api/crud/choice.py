@@ -1,10 +1,10 @@
-from typing import List
+from typing import List, Tuple
 
-from sqlalchemy import insert
+from sqlalchemy import func, insert, text
 from sqlalchemy.orm import Session
 
 from poll_api.crud.base import CRUDBase
-from poll_api.models import Choice
+from poll_api.models import Choice, Vote
 from poll_api.schemas.choice import ChoiceBase
 
 
@@ -35,6 +35,34 @@ class CRUDChoice(CRUDBase[Choice, ChoiceBase, ChoiceBase]):
 
         db.execute(insert(self.model), data)
         db.commit()
+
+    def get_result(
+        self,
+        db: Session,
+        question_id: int
+    ) -> List[Tuple[Choice, int]]:
+        """Return count votes for choices
+
+        Args:
+            db (Session): Database session
+            question_id (int): Question id
+
+        Returns:
+            List[Tuple[Choice, int]]: Data
+        """
+        return db.query(
+            self.model,
+            func.count(Vote.choice_id).label('votes')
+        ).outerjoin(
+            Vote,
+            self.model.id == Vote.choice_id
+        ).filter(
+            self.model.question_id == question_id
+        ).group_by(
+            self.model.id
+        ).order_by(
+            text('votes DESC')
+        ).all()
 
 
 choice_crud = CRUDChoice(Choice)

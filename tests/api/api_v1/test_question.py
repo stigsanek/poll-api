@@ -22,6 +22,25 @@ def test_no_auth(client: TestClient) -> None:
     assert resp.status_code == 401
 
 
+def test_get_result(client: TestClient, auth_user: dict) -> None:
+    """Test return question results
+
+    Args:
+        client (TestClient): Test client fixture
+        auth_user (dict): Auth headers fixture
+    """
+    url = f'{urls.questions}/results'
+
+    resp = client.get(url=f'{url}?question_id=10', headers=auth_user)
+    assert resp.status_code == 404
+
+    resp = client.get(url=f'{url}?question_id=1', headers=auth_user)
+    resp_data = resp.json()
+    assert resp.status_code == 200
+    assert len(resp_data) == 3
+    assert resp_data[0]['votes'] == 2
+
+
 def test_get_list(client: TestClient, auth_user: dict) -> None:
     """Test return question list
 

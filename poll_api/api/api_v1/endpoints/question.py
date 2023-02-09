@@ -9,8 +9,30 @@ from poll_api.crud.choice import choice_crud
 from poll_api.crud.question import question_crud
 from poll_api.models import User
 from poll_api.schemas import question
+from poll_api.schemas.choice import ChoiceResult
 
 router = APIRouter()
+
+
+@router.get(
+    path='/results',
+    response_model=List[ChoiceResult],
+    dependencies=[Depends(get_active_user)]
+)
+def get_result(
+    question_id: int,
+    db: Session = Depends(get_db),
+) -> Any:
+    """Returns question result
+    """
+    result = choice_crud.get_result(db=db, question_id=question_id)
+
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Question not found'
+        )
+    return [ChoiceResult(id=m.id, text=m.text, votes=v) for m, v in result]
 
 
 @router.get(
