@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, conlist
 
 from poll_api.schemas.choice import Choice, ChoiceBase
 
@@ -15,7 +15,7 @@ class QuestionBase(BaseModel):
 class QuestionCreate(QuestionBase):
     """Properties to receive via API on creation
     """
-    choices: List[ChoiceBase]
+    choices: conlist(ChoiceBase, min_items=2, max_items=10)
 
 
 class Question(QuestionBase):
