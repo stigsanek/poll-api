@@ -1,20 +1,25 @@
 from fastapi import APIRouter
 
-from poll_api.api.api_v1.endpoints import login, question, users
+from poll_api.api.api_v1.endpoints import choice, login, question, users
 
 api_router = APIRouter()
 
 api_router.include_router(
     router=login.router,
-    tags=['login']
+    tags=['Login']
 )
 api_router.include_router(
     router=question.router,
     prefix='/questions',
-    tags=['questions']
+    tags=['Questions']
+)
+api_router.include_router(
+    router=choice.router,
+    prefix='/choices',
+    tags=['Choices']
 )
 api_router.include_router(
     router=users.router,
     prefix='/users',
-    tags=['users']
+    tags=['Users']
 )
