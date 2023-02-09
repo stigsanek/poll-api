@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class VoteBase(BaseModel):
     """Base shared properties
     """
+    question_id: int
     choice_id: int
 
 

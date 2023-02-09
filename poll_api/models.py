@@ -62,6 +62,10 @@ class Question(Base):
         back_populates='question',
         cascade='all, delete-orphan'
     )
+    votes: Mapped[List['Vote']] = relationship(
+        back_populates='question',
+        cascade='all, delete-orphan'
+    )
 
 
 class Choice(Base):
@@ -95,6 +99,8 @@ class Vote(Base):
         default=datetime.utcnow,
         onupdate=datetime.utcnow
     )
+    question_id: Mapped[int] = mapped_column(ForeignKey('question.id'))
+    question: Mapped['Question'] = relationship(back_populates='votes')
     choice_id: Mapped[int] = mapped_column(ForeignKey('choice.id'))
     choice: Mapped['Choice'] = relationship(back_populates='votes')
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
