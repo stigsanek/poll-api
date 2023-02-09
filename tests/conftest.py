@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from poll_api.db import SessionLocal, engine
 from poll_api.main import app
-from poll_api.models import Base, Choice, Question, User
+from poll_api.models import Base, Choice, Question, User, Vote
 from tests import FAKE_PASSWORD, urls
 from tests.utils import read_json_fixture
 
@@ -26,6 +26,8 @@ def load_fixtures() -> Generator:
     [db.add(Question(**question)) for question in questions]
     choices = read_json_fixture('choices.json')
     [db.add(Choice(**choice)) for choice in choices]
+    votes = read_json_fixture('votes.json')
+    [db.add(Vote(**vote)) for vote in votes]
 
     db.commit()
     yield
@@ -42,24 +44,6 @@ def client() -> Generator:
     """
     with TestClient(app) as c:
         yield c
-
-
-@pytest.fixture(scope='module')
-def auth_admin(client: TestClient) -> dict:
-    """Auth headers fixture for superuser
-
-    Args:
-        client (TestClient): Test client fixture
-
-    Returns:
-        dict: Auth headers
-    """
-    resp = client.post(
-        url=urls.login,
-        data={'username': 'admin', 'password': FAKE_PASSWORD}
-    )
-    access_token = resp.json()['access_token']
-    return {'Authorization': f'Bearer {access_token}'}
 
 
 @pytest.fixture(scope='module')

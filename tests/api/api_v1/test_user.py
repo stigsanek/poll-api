@@ -1,6 +1,25 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from tests import FAKE_PASSWORD, urls
+
+
+@pytest.fixture(scope='module')
+def auth_admin(client: TestClient) -> dict:
+    """Auth headers fixture for superuser
+
+    Args:
+        client (TestClient): Test client fixture
+
+    Returns:
+        dict: Auth headers
+    """
+    resp = client.post(
+        url=urls.login,
+        data={'username': 'admin', 'password': FAKE_PASSWORD}
+    )
+    access_token = resp.json()['access_token']
+    return {'Authorization': f'Bearer {access_token}'}
 
 
 def test_no_auth(client: TestClient) -> None:
